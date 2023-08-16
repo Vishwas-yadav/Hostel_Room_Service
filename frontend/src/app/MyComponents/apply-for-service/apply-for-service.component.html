@@ -1,0 +1,47 @@
+
+<div class="container  my-4">
+    <h5>Request For Room Service</h5>
+    <form class="py-4 px-4 border">
+        <div class="input-group " [class.border-red]="wrongServiceType" >
+            <label class="input-group-text" for="inputGroupSelect01">Service Type*</label>
+            <select class="form-select" id="inputGroupSelect01"  placeholder="choose one" [(ngModel)]="selectedValue" name="serviceType" (click)="clickedAnyField()">
+              <option *ngFor="let opt of this.serviceType">{{opt.name}}</option>  
+            </select>
+          </div>
+          <label class="color-red small mb-2" [class.invisible]="!wrongServiceType">This Field is Mandatory</label>
+          <div class="input-group mb-4">
+            <label class="input-group-text">Issue Description</label>
+            <textarea class="form-control"  (click)="clickedAnyField()" aria-label="With textarea" [(ngModel)]="descValue" name="descValue"></textarea>
+          </div>
+          <label>Prefered Time Slot:</label>
+          <div class="input-group " [class.border-red]="wrongDateValue"> <!-- Date input -->
+            <label class="input-group-text" for="date">Date*</label>
+            <input class="form-control"  (click)="clickedAnyField()" id="date" name="date" placeholder="MM/DD/YYY" type="date" [(ngModel)]="dateValue" name="dateValue"/>
+          </div>
+          <label class="color-red small" [class.invisible]="!wrongDateValue">Field Missing or Date must not be lesser than today</label>
+          <div class="input-group " [class.border-red]="wrongTimeValue"> <!-- Date input -->
+            <label class="input-group-text" for="time">Time*(Between)</label>
+            <input class="form-control col-6"  (click)="clickedAnyField()" id="from" name="from" placeholder="From" type="time"  [(ngModel)]="timeFromValue" name="timeFromValue"/>
+            <input class="form-control col-6"  (click)="clickedAnyField()" id="to" name="to" placeholder="To" type="time" [(ngModel)]="timeToValue" name="timeToValue"/>
+          </div>
+          <label class="color-red small" [class.invisible]="!wrongTimeValue">This Field is Mandatory (or) 'From' time should be less than 'To'</label>
+        <div class="mt-3 text-center">
+            <button type="submit" (click)="SubmitRequest()" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+</div>
+
+
+<div class="container my-6">
+    <h5>Pending Requests List</h5> 
+    <div *ngFor="let list of reqObjArr" class="card py-4 px-4 mb-4">
+      <div class="fw-bold">Request Type</div>
+      <div class="mb-2">{{list.serviceType}}</div>
+      <div class="fw-bold">Request Date</div>
+      <div>{{list.reqDate}}</div>
+      <div class="text-center">
+        <button class="btn btn-sm btn-danger" (click)="deleteServiceRequest(list)">Delete</button>
+      </div>
+    </div> 
+
+</div>

@@ -1,0 +1,29 @@
+<div class="container card py-4 mt-4 col-md-5 col-10">
+    <h5>Login</h5>
+    <form class="mt-5">
+        <div>
+            <label for="exampleInputEmail1" class="form-label">Email*</label>
+            <input type="email" [class.wrong]="wrongEmail" class="form-control" [(ngModel)]="email" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" (click)="resetAllVal()">
+            <label class="small color-red" [class.invisible]="!wrongEmail">Field Missing or Format incorrect</label>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password*</label>
+            <input type="password" class="form-control"  [class.wrong]="wrongPassword" [(ngModel)]="password" name="password" id="exampleInputPassword1"  (click)="resetAllVal()">
+            <label class="small color-red" [class.invisible]="!wrongPassword">Field Missing</label>
+        </div>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col text-end">
+                    <button type="submit" (click)="LoginClicked()" class="btn btn-sm btn-primary">Login</button>
+                </div>
+                <div class="col text-align-left">
+                    <button type="submit" (click)="registerStudent()" class="btn btn-sm btn-info color-white">Register</button>
+                </div>
+            </div>
+            <!-- <div class="text-center text-muted small mt-3 text-decoration-underline">
+                <span class="cursor-pointer-forget">Forgot Password</span>
+            </div> -->
+        </div>
+    </form>
+
+</div>

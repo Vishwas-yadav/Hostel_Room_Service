@@ -1,0 +1,18 @@
+.text-align-left{
+    text-align: left;
+}
+.cursor-pointer-forget{
+    cursor: pointer;
+}
+.cursor-pointer-forget:hover{
+    color: black;
+}
+.color-white{
+color: white;
+}
+.color-red{
+    color: red;
+}
+.wrong{
+    border: 1px solid red;
+}
