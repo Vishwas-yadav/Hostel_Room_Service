@@ -13,7 +13,7 @@
             <label class="input-group-text">Issue Description</label>
             <textarea class="form-control"  (click)="clickedAnyField()" aria-label="With textarea" [(ngModel)]="descValue" name="descValue"></textarea>
           </div>
-          <label>Prefered Time Slot:</label>
+          <label>Preferred Time Slot:</label>
           <div class="input-group " [class.border-red]="wrongDateValue"> <!-- Date input -->
             <label class="input-group-text" for="date">Date*</label>
             <input class="form-control"  (click)="clickedAnyField()" id="date" name="date" placeholder="MM/DD/YYY" type="date" [(ngModel)]="dateValue" name="dateValue"/>
