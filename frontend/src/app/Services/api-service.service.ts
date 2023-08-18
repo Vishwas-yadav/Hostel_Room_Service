@@ -8,7 +8,7 @@ import { Observable, catchError, retry, throwError } from 'rxjs';
 })
 export class ApiServiceService {
 
-  apiUrl:any='http://localhost:3000/api';
+  apiUrl:any='http://localhost:7000/api';
   constructor(private http: HttpClient) {
    }
   
