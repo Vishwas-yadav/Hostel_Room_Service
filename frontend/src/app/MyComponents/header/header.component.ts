@@ -9,7 +9,6 @@ import { ListenLogedInService } from 'src/app/Services/listen-loged-in.service';
 export class HeaderComponent {
 constructor(public isLogedIn:ListenLogedInService){
   let userFromLocal=localStorage.getItem("user");
-  // console.log("got::",userFromLocal);
   
   if(userFromLocal){
     const userobj=JSON.parse(userFromLocal);
@@ -20,7 +19,6 @@ constructor(public isLogedIn:ListenLogedInService){
 }
 logout=()=>{
   localStorage.removeItem("user");
-  //this.isLogedoff=true;
   this.isLogedIn.isSomeoneLoggedIn=false;
   this.isLogedIn.userName="";
 }

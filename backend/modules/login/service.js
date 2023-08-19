@@ -103,9 +103,9 @@ const registerUserService=async(params)=>{
         }
         console.log("user registed successfully!!!");
         let jwtResult = await getJwtToken(payload);
-
+        let finalObj={jwt:jwtResult,...payload};
         const result={
-            res:jwtResult,
+            res:finalObj,
             msg:"User registerd successfully!"
         }
         return result;
@@ -158,8 +158,9 @@ const authUserService=async(params)=>{
                 }
             }else{
                 let jwtResult = await getJwtToken(payload);
+                let finalObj={jwt:jwtResult,...payload};
                 result = {
-                    res: jwtResult,
+                    res: finalObj,
                     msg: 'login successfull!',
                 };
             }
@@ -181,7 +182,27 @@ const authUserService=async(params)=>{
     throw error;
     }
 }
+const toggleAccessService=async(params)=>{
+    try {
+        let {id}=params;
+        let student=await login.findById(id);
+        if(student.isActive){
+            await login.findByIdAndUpdate(id,{isActive:false});
+        }else{
+            await login.findByIdAndUpdate(id,{isActive:true});
+        }
+        return{
+            msg:"Updated Successfully!"
+        }
+
+    } catch (error) {
+        console.log("Error in toggleAccessService:", error);
+    throw error;
+    }
+}
+
 module.exports={
     registerUserService,
-    authUserService
+    authUserService,
+    toggleAccessService
 }

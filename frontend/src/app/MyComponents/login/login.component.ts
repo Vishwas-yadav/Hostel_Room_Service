@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ListenLogedInService } from 'src/app/Services/listen-loged-in.service';
+import { ApiServiceService } from 'src/app/Services/api-service.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent {
   wrongEmail: boolean = false;
   wrongPassword: boolean = false;
 
-  constructor(private router: Router, private toastr: ToastrService, private loggedinserve: ListenLogedInService) {
+  constructor(private router: Router, private toastr: ToastrService, private loggedinserve: ListenLogedInService,private apiService:ApiServiceService) {
   }
 
 
@@ -31,29 +32,10 @@ export class LoginComponent {
         email: this.email,
         password: this.password
       }
-      const resObj = this.doLogin(user);
-      console.log("Login:", resObj);
-      if (resObj.res) {
-
-        this.toastr.success(resObj.msg);
-        localStorage.setItem("user", JSON.stringify(resObj));
-        this.loggedinserve.isSomeoneLoggedIn = true;
-        this.loggedinserve.userName = resObj.name;
-        this.loggedinserve.role = resObj.role;
-        if (resObj.role === "student") {
-          this.router.navigate(['apply-request']);
-        } else if (resObj.role === "admin") {
-          this.router.navigate(['admin-dashboard']);
-        } else if (resObj.role === "staff") {
-          this.router.navigate(['staff-dashboard']);
-        }
-
-
-
+      const successLogin = this.doLogin(user);
+      if (successLogin) {
         this.email = "";
         this.password = "";
-      } else {
-        this.toastr.error(resObj.msg);
       }
     }
   }
@@ -68,6 +50,32 @@ export class LoginComponent {
     this.wrongPassword = false;
   }
   doLogin(user: any) {
+
+    this.apiService.loginUser(user).subscribe(
+      (res)=>{
+        this.setLocalStorage(res.res);
+        this.toastr.success(res.msg);
+
+        if (res.res.role === "student") {
+          this.router.navigate(['apply-request']);
+        } else if (res.res.role === "admin") {
+          this.router.navigate(['admin-dashboard']);
+        } else if (res.res.role === "staff") {
+          this.router.navigate(['staff-dashboard']);
+        }
+
+        return true;
+      },
+      (err)=>{
+        this.toastr.error(err.error.err);
+        console.log(err.error.err);
+        return false;
+      }
+    )
+
+
+
+
     let dummyStudent = {
       id: 123,
       name: "Vishwas",
@@ -94,6 +102,14 @@ export class LoginComponent {
     }
 
   }
+  setLocalStorage(obj:any){
+    console.log("obj:",obj);
+    localStorage.setItem("user", JSON.stringify(obj));
+    this.loggedinserve.isSomeoneLoggedIn = true;
+    this.loggedinserve.userName = obj.name;
+    this.loggedinserve.role = obj.role;
+  }
+
   registerStudent = () => {
     this.router.navigate(['register-student']);
   }

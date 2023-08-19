@@ -2,7 +2,7 @@ const {Router}=require("express");
 const loginRouter = Router();
 const { middleware: bodyParser } = require("bodymen");
 const authenticate=require('../../utilities/authentication/passport')().authenticate;
-const {registerUserCtrl,authUserCtrl}=require('./controller');
+const {registerUserCtrl,authUserCtrl,toggleAccessCtrl}=require('./controller');
 
 loginRouter.post('/register-user',registerUserCtrl);
 
@@ -14,5 +14,9 @@ loginRouter.post('/login',bodyParser({
         type: String,
     }
 }),authUserCtrl)
+
+loginRouter.get('/toggle-access/:id',toggleAccessCtrl);
+
+
 
 module.exports=loginRouter;

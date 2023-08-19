@@ -1,6 +1,7 @@
 import { Time } from '@angular/common';
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { ApiServiceService } from 'src/app/Services/api-service.service';
 
 @Component({
   selector: 'app-apply-for-service',
@@ -21,7 +22,7 @@ export class ApplyForServiceComponent {
 
   reqObjArr:any;
 
-  constructor(private toastr: ToastrService){
+  constructor(private toastr: ToastrService,private apiService:ApiServiceService){
   this.serviceType=[
       {s_id:1,name:"Room Cleaning Service"},
       {s_id:2,name:"Electric Appliance Service"},
@@ -48,17 +49,20 @@ export class ApplyForServiceComponent {
       return;
     }
 
+    let userFromLocal=localStorage.getItem("user");
+     let userobj=userFromLocal?JSON.parse(userFromLocal):"";
+
 
     const ReqObj={
       serviceType:this.selectedValue,
       serviceDescription:this.descValue,
       preferedDate:this.dateValue,
       preferedTimeFrom:this.timeFromValue,
-      preferedTimeTo:this.timeToValue
+      preferedTimeTo:this.timeToValue,
+      userid:userobj.userid
     }
 
-    let res=this.reqService(ReqObj);
-    this.toastr.success(res.msg);
+    this.reqService(ReqObj);
     this.resetForm();
     //console.log("value picked:",this.selectedValue,this.descValue,this.dateValue,this.timeFromValue,this.timeToValue);
 
@@ -75,8 +79,18 @@ export class ApplyForServiceComponent {
 
 
   reqService=(reqObj:any)=>{
-    localStorage.setItem("service",JSON.stringify(reqObj));
-    return {msg:"Successfully Submitted Request!"}
+    console.log("obj:",reqObj);
+    this.apiService.postRequests(reqObj).subscribe(
+      (res)=>{
+        this.toastr.success(res.msg);
+      },
+      (err)=>{
+        console.log(err.error.err);
+        this.toastr.error("something went wrong!");
+      }
+    )
+    
+    // localStorage.setItem("service",JSON.stringify(reqObj));
   }
   deleteServiceRequest=(reqItem:any)=>{
    let cnf= confirm('Are you sure You want to delete?');
@@ -86,21 +100,5 @@ export class ApplyForServiceComponent {
     this.toastr.warning("deleted Service Request!");
     //this.reqObjArr.splice(reqItem.inx)
   }
-
-  // mapServiceTypeWithServiceId=(selectedValue:String)=>{
-  //   if(selectedValue==="Room Cleaning Service")
-  //   return {s_id:1,name:"Room Cleaning Service"};
-
-  //   if(selectedValue==="Electric Appliance Service")
-  //   return {s_id:1,name:"Room Cleaning Service"};
-
-  //   if(selectedValue==="Network Device Service")
-  //   return {s_id:1,name:"Room Cleaning Service"};
-
-  //   if(selectedValue==="Funiture Repair Service")
-  //   return {s_id:1,name:"Room Cleaning Service"};
-
-
-  // }
 
 }

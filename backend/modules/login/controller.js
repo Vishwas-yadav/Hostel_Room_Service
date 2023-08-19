@@ -1,5 +1,5 @@
 const {successResponse,internalServer,badRequest}=require('../../utilities/response/index');
-const {registerUserService,authUserService} =require('./service');
+const {registerUserService,authUserService,toggleAccessService} =require('./service');
 
 const registerUserCtrl=async(req,res)=>{
     try {
@@ -39,9 +39,27 @@ const authUserCtrl=async(req,res)=>{
     }
     
     }
+    const toggleAccessCtrl=async(req,res)=>{
+        try {
+        const result=await toggleAccessService(req.params);
+        successResponse(res,result);
+        } catch (error) {
+            if (error.kn) {
+                console.log("Known error in toggleAccessCtrl:", JSON.stringify(error));
+                badRequest(res, error.msg);
+            } else {
+                console.log("Unknown error in toggleAccessCtrl:", error);
+                let errObj = {
+                    err: UNKNOWN_ERROR
+                };
+                internalServer(res, errObj);
+            }
+        }
+    }
 
  
     module.exports={
         registerUserCtrl,
-        authUserCtrl
+        authUserCtrl,
+        toggleAccessCtrl
     }

@@ -17,12 +17,16 @@ const loginSchema = Schema({
     },
     userid:{
         type:Schema.Types.ObjectId,
-        ref:'user'
+        ref:'users'
     },
     name:{
         type:String,
         require:true
-    }
+    },
+    date: {
+        type: Date,
+        default: new Date(),
+      }
 });
 const login = model("login", loginSchema);
 module.exports = login;

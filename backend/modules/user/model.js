@@ -30,7 +30,11 @@ const userSchema = Schema({
     },
     serviceProvider:{
         type:String
-    }
+    },
+    date: {
+        type: Date,
+        default: new Date(),
+      }
 });
 const user = model("user", userSchema);
 module.exports = user;
