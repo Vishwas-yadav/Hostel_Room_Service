@@ -28,10 +28,29 @@ export class ApplyForServiceComponent {
       {s_id:2,name:"Electric Appliance Service"},
       {s_id:3,name:"Network Device Service"},
       {s_id:4,name:"Funiture Repair Service"}
-  ] 
-  this.reqObjArr=[{serviceType:"Room Cleaning Service",reqDate:"12-12-2023",status:"Pending"},
-  {serviceType:"Electric Appliance Service",reqDate:"25-12-2023",status:"Pending"}]; 
+  ];
+
   }
+  ngOnInit(){
+    this.getAllRequestByuserid();
+  }
+
+  getAllRequestByuserid(){
+    let userFromLocal=localStorage.getItem("user");
+    let userobj=userFromLocal?JSON.parse(userFromLocal):"";
+    this.apiService.getServiceRequestsByRequesterId(userobj.userid).subscribe(
+      (res)=>{
+        console.log(res.res);
+        this.reqObjArr=res.res;
+      },
+      (err)=>{
+        console.log(err.error.err);
+      }
+    )
+  }
+
+
+
   SubmitRequest=()=>{
     if(!this.selectedValue){
       this.wrongServiceType=true;
@@ -64,6 +83,7 @@ export class ApplyForServiceComponent {
 
     this.reqService(ReqObj);
     this.resetForm();
+    
     //console.log("value picked:",this.selectedValue,this.descValue,this.dateValue,this.timeFromValue,this.timeToValue);
 
   }
@@ -82,6 +102,7 @@ export class ApplyForServiceComponent {
     console.log("obj:",reqObj);
     this.apiService.postRequests(reqObj).subscribe(
       (res)=>{
+        location.reload();
         this.toastr.success(res.msg);
       },
       (err)=>{
@@ -96,8 +117,18 @@ export class ApplyForServiceComponent {
    let cnf= confirm('Are you sure You want to delete?');
    if(!cnf)
    return;
-    console.log("delete",reqItem);
-    this.toastr.warning("deleted Service Request!");
+    console.log("delete",reqItem._id);
+    this.apiService.deleteServiceRequestsByRequestId(reqItem._id).subscribe(
+      (res)=>{
+        this.toastr.warning(res.msg);
+        location.reload();
+      },
+      (err)=>{
+        console.log(err.error.err);
+        this.toastr.error("Something went wrong!")
+      }
+    )
+    
     //this.reqObjArr.splice(reqItem.inx)
   }
 

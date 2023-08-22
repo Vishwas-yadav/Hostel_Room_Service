@@ -25,6 +25,10 @@ const requestSchema = Schema({
     requester:{
         type:Schema.Types.ObjectId
     },
+    pendingStatus:{
+        type:Boolean,
+        default:true
+    },
     date: {
         type: Date,
         default: new Date(),

@@ -39,7 +39,74 @@ const serviceRequestService=async(params)=>{
     }
 }
 
+const getServiceResquestByIdService=async(params)=>{
+    try {
+        let {id}=params;
+        let requestEntry=await request.find({requester:id,pendingStatus:true}).sort({_id:-1});
+        return{
+            res:requestEntry,
+            msg:"Fetched successfuly!"
+        }
+    } catch (error) {
+        console.log("Error in getServiceResquestByIdService:", error);
+    throw error;
+    }
+}
+const deleteReqByIdService=async(params)=>{
+    try {
+        let {id}=params;
+        await request.findByIdAndDelete(id);
+        return{
+            msg:"deleted Service Request!"
+        }
+    } catch (error) {
+        console.log("Error in deleteReqByIdService:", error);
+    throw error;
+    }
+}
+
+const getStaffTasksByIdService=async(params)=>{
+    try {
+        let {id}=params;
+        let staff=await user.findById(id);
+        let filter={
+            hostelName:staff.assignedHostel,
+            serviceType:staff.serviceProvider,
+            pendingStatus:true
+        };
+        let taskList=await request.find(filter);
+        return{
+            res:taskList,
+            msg:"Fetched Successfully!"
+        }
+
+    } catch (error) {
+        console.log("Error in getStaffTasksByIdService:", error);
+    throw error;
+    }
+}
+
+const setPendingStatusToFalseByRequestId=async(params)=>{
+    try {
+        let {id}=params;
+        let updateVal={
+            pendingStatus:false
+        };
+        await request.findByIdAndUpdate(id,updateVal);
+        return {
+            msg:"Updated Successfully!"
+        }
+    } catch (error) {
+        console.log("Error in setPendingStatusToFalseByRequestId:", error);
+        throw error;
+    }
+}
+
 
 module.exports={
-    serviceRequestService
+    serviceRequestService,
+    getServiceResquestByIdService,
+    deleteReqByIdService,
+    getStaffTasksByIdService,
+    setPendingStatusToFalseByRequestId
 }

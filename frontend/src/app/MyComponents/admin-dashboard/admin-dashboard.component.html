@@ -74,10 +74,10 @@
         </tbody>
       </table>
       <div class="text-center">
-        <button class="btn btn-sm btn-outline-info" (click)="prevClick()"><< Prev</button>
-        <button class="btn btn-sm btn-outline-info mx-2" (click)="nextClick()">Next >></button>
+        <button class="btn btn-sm btn-outline-info" [disabled]="skip==0" (click)="prevClick()"><< Prev</button>
+        <button class="btn btn-sm btn-outline-info mx-2" [disabled]="show==allCount" (click)="nextClick()">Next >></button>
       </div>
-      <div>showing:{{skip || limit}}/{{allCount}}</div>
+      <div class="text-center mt-4">Showing {{show}}/{{allCount}}</div>
 </div>
 <div class="my-2">
 .

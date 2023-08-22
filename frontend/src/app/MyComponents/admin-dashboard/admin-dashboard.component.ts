@@ -22,6 +22,8 @@ export class AdminDashboardComponent {
   wrongserviceType:boolean=false;
   staffName:any;
   wrongStaffName:boolean=false;
+  i:number=2;
+  show:number=this.limit;
   constructor(private apiService:ApiServiceService,private toastr:ToastrService){
     this.fetchResults();
     this.apiService.fetchStaffList().subscribe(
@@ -60,19 +62,32 @@ export class AdminDashboardComponent {
     this.fetchResults();
   }
   nextClick=()=>{
-    if(this.skip+this.limit<=this.allCount){
+    if((this.i*this.limit)<=this.allCount){
       this.skip=this.skip+this.limit;
       this.fetchResults();
+      this.i++;
+      this.show=this.i*this.limit;
     }else{
-      this.skip=this.allCount;
+      if(this.show!=this.allCount){
+        this.i--;
+        this.skip=this.i*this.limit;
+        this.fetchResults();
+        this.show=this.allCount;
+      }
+      // this.fetchResults();
+     
     }
   }
   prevClick=()=>{
     if(this.skip-this.limit>=0){
+      this.i--;
+      this.show=this.i*this.limit;
       this.skip=this.skip-this.limit;
       this.fetchResults();
     }else{
       this.skip=0;
+      this.i=2;
+      this.show=this.limit;
     }
   }
 

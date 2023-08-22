@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, catchError, retry, throwError } from 'rxjs';
@@ -11,7 +11,27 @@ export class ApiServiceService {
   // apiUrl:any='http://3.142.133.104/api';
   apiUrl: any = 'http://localhost:7000/api';
 
+  
+
   constructor(private http: HttpClient) {
+    
+  }
+  ngOnInit(){
+    
+  }
+  getTokenAuth=()=>{
+    let userFromLocal=localStorage.getItem("user");
+    let api_key='';
+    if(userFromLocal){
+      const userobj=JSON.parse(userFromLocal);
+      api_key=userobj.jwt;
+    }
+    
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${api_key}`
+      });  
+      return headers;
   }
 
 
@@ -24,44 +44,49 @@ export class ApiServiceService {
   }
 
   fetchStudentDetails = (skip: any, limit: any, search: any): Observable<any> => {
-    console.log("skipp:", skip);
-
+    // console.log("skipp:", skip);
+    let token=this.getTokenAuth();
     if (search)
-      return this.http.get(`${this.apiUrl}/details/all-student?limit=${limit}&skip=${skip}&search=${search}`);
+      return this.http.get(`${this.apiUrl}/details/all-student?limit=${limit}&skip=${skip}&search=${search}`,{ headers: token });
     else
-      return this.http.get(`${this.apiUrl}/details/all-student?limit=${limit}&skip=${skip}`);
+      return this.http.get(`${this.apiUrl}/details/all-student?limit=${limit}&skip=${skip}`,{ headers: token });
   }
 
   fetchStaffList = (): Observable<any> => {
-    return this.http.get(`${this.apiUrl}/details/all-staff`);
+    let token=this.getTokenAuth();
+    return this.http.get(`${this.apiUrl}/details/all-staff`,{ headers: token });
   }
 
   mapstaff = (reqObj: any): Observable<any> => {
-    return this.http.post(`${this.apiUrl}/details/update-staff-by-id`, reqObj);
+    let token=this.getTokenAuth();
+    return this.http.post(`${this.apiUrl}/details/update-staff-by-id`, reqObj,{ headers: token });
   }
 
   toggleAccess = (id:any): Observable<any> => {
-    return this.http.get(`${this.apiUrl}/user/toggle-access/${id}`);
+    let token=this.getTokenAuth();
+    return this.http.get(`${this.apiUrl}/user/toggle-access/${id}`,{ headers: token });
   }
   postRequests = (reqObj: any): Observable<any> => {
-    return this.http.post(`${this.apiUrl}/request/service-request`, reqObj);
+    let token=this.getTokenAuth();
+    return this.http.post(`${this.apiUrl}/request/service-request`, reqObj,{ headers: token });
   }
 
+  getServiceRequestsByRequesterId = (id:any): Observable<any> => {
+    let token=this.getTokenAuth();
+    return this.http.get(`${this.apiUrl}/request/requester-id/${id}`,{ headers: token });
+  }
+  deleteServiceRequestsByRequestId = (id:any): Observable<any> => {
+    let token=this.getTokenAuth();
+    return this.http.delete(`${this.apiUrl}/request/delete-by-id/${id}`,{ headers: token });
+  }
 
-  //  handleError(error:any) {
-  //   console.log("Error in Service:",error.error.err);
-  //   console.log("Error code:",error.status);
-  //   let errorMessage = '';
-  //   if (error.error instanceof ErrorEvent) {
-  //     // client-side error
-  //     errorMessage = `Error: ${error.error.message}`;
-  //   } else {
-  //     // server-side error
-  //     errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-  //   }
-  //   //console.log(errorMessage);
-  //   return throwError(() => {
-  //       return errorMessage;
-  //   });
-  // }
+  getTasksListByStaffUserId = (id:any): Observable<any> => {
+    let token=this.getTokenAuth();
+    return this.http.get(`${this.apiUrl}/request/tasks-list/${id}`,{ headers: token });
+  }
+  setRequestDoneByRequestId = (id:any): Observable<any> => {
+    let token=this.getTokenAuth();
+    return this.http.get(`${this.apiUrl}/request/setRequestDone/${id}`,{ headers: token });
+  }
+
 }

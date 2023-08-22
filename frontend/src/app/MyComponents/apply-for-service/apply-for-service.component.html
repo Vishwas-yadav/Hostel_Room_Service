@@ -1,6 +1,6 @@
 
 <div class="container  my-4">
-    <h5>Request For Room Service</h5>
+    <h2>Request For Room Service</h2>
     <form class="py-4 px-4 border">
         <div class="input-group " [class.border-red]="wrongServiceType" >
             <label class="input-group-text" for="inputGroupSelect01">Service Type*</label>
@@ -33,15 +33,35 @@
 
 
 <div class="container my-6">
-    <h5>Pending Requests List</h5> 
+    <h2>Pending Requests List</h2> 
     <div *ngFor="let list of reqObjArr" class="card py-4 px-4 mb-4">
-      <div class="fw-bold">Request Type</div>
-      <div class="mb-2">{{list.serviceType}}</div>
-      <div class="fw-bold">Request Date</div>
-      <div>{{list.reqDate}}</div>
+      <div class="row text-center">
+        <div class="col-6">
+          <div class="fw-bold">Request Type</div>
+          <div class="mb-2">{{list.serviceType}}</div>
+        </div>
+        <div class="col-6">
+          <div class="fw-bold">Request Date</div>
+          <div>{{list.date | date: 'dd/MM/yyyy'}}</div>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col-6">
+          <div class="fw-bold">Prefered Date For Service</div>
+          <div class="mb-2">{{list.preferedDate | date: 'dd/MM/yyyy'}}</div>
+        </div>
+        <div class="col-6">
+          <div class="fw-bold">Prefered Time For Service</div>
+          <div>{{list.preferedTimeFrom}} - {{list.preferedTimeTo}}</div>
+        </div>
+      </div>
+      
+      
       <div class="text-center">
         <button class="btn btn-sm btn-danger" (click)="deleteServiceRequest(list)">Delete</button>
       </div>
     </div> 
-
+</div>
+<div class="mt-1">
+  .
 </div>

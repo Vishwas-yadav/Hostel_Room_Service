@@ -23,6 +23,9 @@ color: white;
 .backgroud-theame{
     background: #F8F9FA;
 }
+.no-scrollbar{
+    overflow-y: hidden;
+}
 .height-large{
     /* margin-top:-10px; */
     bottom: -14px;

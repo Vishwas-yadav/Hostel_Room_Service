@@ -15,7 +15,7 @@ loginRouter.post('/login',bodyParser({
     }
 }),authUserCtrl)
 
-loginRouter.get('/toggle-access/:id',toggleAccessCtrl);
+loginRouter.get('/toggle-access/:id',authenticate(),toggleAccessCtrl);
 
 
 
