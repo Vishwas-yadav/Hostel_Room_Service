@@ -4,6 +4,10 @@ const mongoose = require("mongoose");
 const cors = require('cors');
 require('dotenv').config();
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger-config'); // Path to your swagger-config.js
+
+
 const port = process.env.PORT || 7000;
 
 app.use(express.json());
@@ -13,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use("/api", require('./routes'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 //db connection.
