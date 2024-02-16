@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require("mongoose");
 const cors = require('cors');
+const fs = require('fs');
 require('dotenv').config();
 
 const swaggerUi = require('swagger-ui-express');
@@ -19,6 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", require('./routes'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Write Swagger specification to a JSON file
+fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpec, null, 2), 'utf8');
 
 //db connection.
 mongoose.connect(process.env.mongoURI, { useNewUrlParser: true,useUnifiedTopology: true})

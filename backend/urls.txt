@@ -1,0 +1,11 @@
+/api/user/register-user
+/api/user/login
+/api/user/toggle-access/{id}
+/api/request/service-request
+/api/request/requester-id/{id}
+/api/request/delete-by-id/{id}
+/api/request/tasks-list/{id}
+/api/request/setRequestDone/{id}
+/api/details/all-student
+/api/details/all-staff
+/api/details/update-staff-by-id
